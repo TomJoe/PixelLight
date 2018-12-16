@@ -16,8 +16,8 @@
 #define SHOW FastLED.show()
 #define PRNT Serial.print
 #define PRLN Serial.println
+#define PRSL Serial.print("/")
 #define DELY delay(aDelay)
-#define DEBG Serial.prin
 
 // How many leds in your strip?
 #define NUM_LEDS 256
@@ -67,33 +67,16 @@ void setup() {
   }
   SHOW;
 
-  CLEAR;
-  drawCircle(6,8,6,RED);
-  drawCircle(7,9,9,GRN);
-  drawCircle(8,3,12,BLU);
-  SHOW;
+  playScript(5);
+  playScript(3);
 
-  delay(5000);
-
-  CLEAR;
-  fillCircle(6,8,8,RED);
-  SHOW;
-
-  delay(5000);
-
-  sinSplitHorz(10, 12, 2);
-
-  delay(5000);
-  
-  playScript(2); 
-    
 }
 
 void loop() {
 
-  playScript(random8(4,9));
-  playScript(random8(0,3));
-  
+  playScript(random8(6, 10));
+  playScript(random8(0, 5));
+
 }
 
 int xyToLED(int x, int y) {

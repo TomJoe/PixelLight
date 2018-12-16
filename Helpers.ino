@@ -1,3 +1,5 @@
+
+
 void debug(float x, float y, float i) {
   Serial.print("x:"); Serial.println(x);
   Serial.print("y:"); Serial.println(y);
@@ -94,10 +96,13 @@ void drawCircle(int x0, int y0, int radius, CRGB color) {
 }
 
 void fillCircle(int x, int y, int r, CRGB color) {
-  for (int xi = x - r; xi < x + r; xi++) {
-    for (int yi = y - r; yi < y + r; yi++) {
-      if ((r * r) >= ((xi - x) * (xi - x) + (yi - y) * (yi - y))) {
-        setPixel(xi, xi, color);
+  for (int xi = 0; xi < r; xi++) {
+    for (int yi = 0; yi < r; yi++) {
+      if ((r * r) >= ((xi * xi) + (yi * yi))) {
+        setPixel(x+xi, y+yi, color);
+        setPixel(x-xi, y-yi, color);
+        setPixel(x+xi, y-yi, color);
+        setPixel(x-xi, y+yi, color);
       }
     }
   }

@@ -50,7 +50,7 @@ void striperDown(int aDelay, int tail) {
 void sinSplitHorz(int aDelay, int amp, int y) {
   for (int i = 0; i < 250; i++) {
     for (int x = 0; x < COLS; x++) {
-      int yi = y + amp * sin8(10 * (x + i)) / 256;
+      int yi = y + amp * (sin8(10 * (x + i)) + sin8(15 * (x - i)) + sin8(17 * (x + 1 ))) / 1024;
       fillToTop(x, yi, RED);
       fillToBottom(x, yi + 1, BLU);
     }
@@ -71,6 +71,61 @@ void ratator(int aDelay) {
     drawLine(COLS - 1, y, 0, ROWS - y, GRN);
     SHOW;
     delay(aDelay);
+  }
+}
+
+void bloob(bool clear, int aDelay) {
+  if (clear) {
+    fillPanel(WHT);
+    SHOW;
+    DELY;
+  };
+  int xi = random8(16);
+  int yi = random8(16);
+  for (int i = 0; i < 20; i++) {
+    fillCircle(xi, yi, i, RED);
+    SHOW;
+    DELY;
+  }
+  xi = random8(16);
+  yi = random8(16);
+  for (int i = 0; i < 20; i++) {
+    fillCircle(xi, yi,  i, GRN);
+    SHOW;
+    DELY;
+  }
+  xi = random8(16);
+  yi = random8(16);
+  for (int i = 0; i < 20; i++) {
+    fillCircle(xi, yi, i, BLU);
+    SHOW;
+    DELY;
+  }
+}
+
+void tunnel(int aDelay) {
+
+
+  int j = 32;
+  while (j > 0) {
+    CLEAR;
+    int xj = COLS*(sin8_avr(j * 10) - 128)/128;
+    int yj = ROWS*(cos8(j * 10) - 128)/128;
+    PRNT(xj); PRSL;PRNT(yj); PRSL;PRLN(j);
+    int i = 16;
+    
+    while (i > 0) {
+      int x = xj  + i / 2;
+      int y = xj  + i / 2;
+      int r = i;
+      CRGB color = blend(BLK, RED, 256 * i / 16);
+      drawCircle(x, y, r, color);
+      i--;
+    }
+   
+    SHOW;
+    DELY;
+    j--;
   }
 }
 
