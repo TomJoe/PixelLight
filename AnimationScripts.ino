@@ -4,6 +4,7 @@
 #define CMND_ROTATE 3
 #define CMND_BLOOB 4
 #define CMND_TUNNEL 5
+#define CMND_ANSCHISS 6 
 #define CMND_END 0xff
 
 struct animStep {
@@ -80,12 +81,9 @@ static const animStep wipeUD[] PROGMEM = {
 };
 
 static const animStep rotate[] PROGMEM = {
-  animStep{CMND_ROTATE, 0, 0, 0, true, 10},
-  animStep{CMND_ROTATE, 1, 0, 0, true, 10},
-  animStep{CMND_ROTATE, 0, 0, 0, true, 5},
-  animStep{CMND_ROTATE, 1, 0, 0, true, 5},
-  animStep{CMND_ROTATE, 0, 0, 0, true, 0},
-  animStep{CMND_ROTATE, 1, 0, 0, true, 0},
+  animStep{CMND_ROTATE, 2, 100, 0, true, 10},
+  animStep{CMND_ROTATE, 5, 100, 0, true, 10},
+  animStep{CMND_ROTATE, 10, 100, 0, true, 10},
 
   animStep{CMND_END, 0, 0, 0, false, 0}
 };
@@ -156,6 +154,25 @@ static const animStep Tunnel[] PROGMEM = {
   animStep{CMND_END, 0, 0, 0, false, 0}
 };
 
+static const animStep Anschiss[] PROGMEM = {
+  animStep{CMND_ANSCHISS, 0, 0, 0, true , 20},
+  
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
+
+static const animStep richtigerAnschiss[] PROGMEM = {
+  animStep{CMND_ANSCHISS, 1, 0, 0, true , 20},
+  
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
+
+static const animStep krassserAnschiss[] PROGMEM = {
+  animStep{CMND_ANSCHISS, 2, 0, 0, true , 20},
+  
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
+
+
 
 static animStep* const animationSteps[] PROGMEM = {
   wipeLR,       // 0
@@ -168,7 +185,10 @@ static animStep* const animationSteps[] PROGMEM = {
   PacManAnim,   // 7
   MarioAnim,    // 8
   fruits,       // 9
-  DeathAnim     //10
+  DeathAnim,    //10
+  Anschiss,     //11
+  richtigerAnschiss, //11
+  krassserAnschiss //12
 };
 
 void playScript(int scriptID) {
@@ -202,13 +222,16 @@ void playScript(int scriptID) {
         effectWipe(aStep.ID, aStep.xPos, aStep.yPos, aStep.clear, aStep.delay);
         break;
       case CMND_ROTATE:
-        ratator(aStep.delay);
+        ratator(aStep.delay, aStep.xPos, aStep.yPos);
         break;
       case CMND_TUNNEL:
         tunnel(aStep.delay);
         break;
       case CMND_BLOOB:
         bloob(aStep.clear,aStep.delay);
+        break;
+      case CMND_ANSCHISS:
+        scheissAn(aStep.delay, aStep.ID);
         break;
     }
     memcpy_P(&aStep, pgm_read_word(&(animationSteps[scriptID])) + sizeof(struct animStep) * i++, sizeof(struct animStep));

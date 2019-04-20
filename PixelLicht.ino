@@ -5,7 +5,6 @@
 // Use Brigten
 
 
-
 #define BLK CRGB::Black
 #define WHT CRGB::White
 #define RED CRGB::Red
@@ -36,7 +35,6 @@ void setup() {
 
   FastLED.addLeds<WS2801, DATA_PIN, CLOCK_PIN, BGR>(leds, NUM_LEDS);
   FastLED.setCorrection( TypicalSMD5050 );
-  //FastLED.setTemperature( Halogen );
   FastLED.setBrightness( 32 );
 
   Serial.begin(115000);
@@ -67,14 +65,13 @@ void setup() {
   }
   SHOW;
 
-  playScript(5);
   playScript(3);
 
 }
 
 void loop() {
 
-  playScript(random8(6, 10));
+  playScript(random8(6, 13));
   playScript(random8(0, 5));
 
 }
@@ -88,6 +85,8 @@ int xyToLED(int x, int y) {
 
   int pixel;
 
+  
+  
   if (y % 2 == 0)
   {
     pixel = y * ROWS + x;
@@ -95,6 +94,7 @@ int xyToLED(int x, int y) {
     pixel = (y + 1) * ROWS - x - 1;
   }
 
+  if (y >= 6) pixel--;
   return pixel;
 }
 

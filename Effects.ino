@@ -1,3 +1,18 @@
+DEFINE_GRADIENT_PALETTE( heatmap_gp ) {
+  0,     0,  0,  0,   //black
+  128,   255,  0,  0,   //red
+  224,   255, 255,  0,  //bright yellow
+  255,   255, 255, 255
+}; //full white
+
+DEFINE_GRADIENT_PALETTE( red_to_white_gp ) {
+  0,     255,  255, 255,
+  128,   255,    0,   0,
+  255,     0,    0,   0
+}; //full white
+
+DECLARE_GRADIENT_PALETTE( Rainbow_gp);
+
 void striperRight(int aDelay, int tail) {
   for (int x = 0; x < ROWS + tail; x++) {
     CLEAR;
@@ -59,18 +74,20 @@ void sinSplitHorz(int aDelay, int amp, int y) {
   }
 };
 
-void ratator(int aDelay) {
-  for (int x = 0; x < COLS; x++) {
+void ratator(int aDelay, int tail, int len) {
+
+  CRGBPalette16 myPal = Rainbow_gp;
+
+  int i = len;
+  while (i > 0) {
     CLEAR;
-    drawLine(x, 0, COLS - x, ROWS - 1, GRN);
+    for (int j = tail; j > 0; j--) {
+      int x = COLS / 2 - 1 + (sin8(j * 7 + i * 5) - 128) / 16;
+      drawLine(x, 0, COLS - x, ROWS - 1, ColorFromPalette( myPal, 255 - (j * (255 / tail))));
+    }
     SHOW;
-    delay(aDelay);
-  }
-  for (int y = 0; y < ROWS; y++) {
-    CLEAR;
-    drawLine(COLS - 1, y, 0, ROWS - y, GRN);
-    SHOW;
-    delay(aDelay);
+    DELY;
+    i--;
   }
 }
 
@@ -83,14 +100,14 @@ void bloob(bool clear, int aDelay) {
   int xi = random8(16);
   int yi = random8(16);
   for (int i = 0; i < 20; i++) {
-    fillCircle(xi, yi, i, RED);
+    fillCircle(xi, yi, i, GRN);
     SHOW;
     DELY;
   }
   xi = random8(16);
   yi = random8(16);
   for (int i = 0; i < 20; i++) {
-    fillCircle(xi, yi,  i, GRN);
+    fillCircle(xi, yi,  i, RED);
     SHOW;
     DELY;
   }
@@ -103,26 +120,30 @@ void bloob(bool clear, int aDelay) {
   }
 }
 
+void dropSprite(int aDelay, int spriteID){
+  
+}
+
 void tunnel(int aDelay) {
 
+  CRGBPalette16 myPal = red_to_white_gp;
 
-  int j = 32;
+  int j = 64;
   while (j > 0) {
     CLEAR;
-    int xj = COLS*(sin8_avr(j * 10) - 128)/128;
-    int yj = ROWS*(cos8(j * 10) - 128)/128;
-    PRNT(xj); PRSL;PRNT(yj); PRSL;PRLN(j);
+
     int i = 16;
-    
+
     while (i > 0) {
-      int x = xj  + i / 2;
-      int y = xj  + i / 2;
+      int x = COLS / 2 - 1 + (sin8(j * 14) - 128) * (16 - i) / 256;
+      int y = ROWS / 2 - 1 + (cos8(j * 8) - 128) * (16 - i) / 256;
       int r = i;
-      CRGB color = blend(BLK, RED, 256 * i / 16);
-      drawCircle(x, y, r, color);
+      PRNT(x); PRSL; PRNT(y); PRSL; PRLN(r);
+      CRGB color = ColorFromPalette( myPal, (16 - i) * 16);
+      fillCircle(x, y, r, color);
       i--;
     }
-   
+
     SHOW;
     DELY;
     j--;
@@ -130,7 +151,6 @@ void tunnel(int aDelay) {
 }
 
 void effectWipe(int mode, int tail, int yPos, bool clear, int aDelay) {
-  Serial.print("delay: "); Serial.println(aDelay);
   switch (mode) {
     case 0:
       striperRight(aDelay, tail);
