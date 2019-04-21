@@ -72,7 +72,7 @@ void setup() {
 
 void loop() {
 
-  playScript(random8(6, 16));
+  playScript(random8(6, 18));
   playScript(random8(0, 5));
 
 }

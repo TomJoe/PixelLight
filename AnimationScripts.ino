@@ -187,14 +187,15 @@ static const animStep pokeBall[] PROGMEM = {
 };
 
 static const animStep laser[] PROGMEM = {
-  animStep{CMND_RENDER, 12, 0, 0, true , 500},  
-  animStep{CMND_RENDER, 13, 0, 0, true , 500},  
-  animStep{CMND_RENDER, 14, 0, 0, true , 500},  
-  animStep{CMND_RENDER, 15, 0, 0, true , 500},  
-  animStep{CMND_RENDER, 16, 0, 0, true , 500},  
-  animStep{CMND_RENDER, 17, 0, 0, true , 500},  
-  animStep{CMND_RENDER, 18, 0, 0, true , 500},  
-  animStep{CMND_RENDER, 19, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 12, 0, 0, true , 1000},  
+
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
+
+static const animStep herzlich[] PROGMEM = {
+  animStep{CMND_RENDER, 13, 0, 0, true , 1000},  
+  animStep{CMND_RENDER, 13, 0, 0, true , 1000},
+  animStep{CMND_RENDER, 13, 0, 0, true , 1000}, 
 
   animStep{CMND_END, 0, 0, 0, false, 0}
 };
@@ -219,7 +220,8 @@ static animStep* const animationSteps[] PROGMEM = {
   krassserAnschiss, //13
   StarField,     //14
   pokeBall,      //15
-  laser          //16
+  laser,         //16
+  herzlich       //17
 };
 
 void playScript(int scriptID) {
@@ -231,23 +233,13 @@ void playScript(int scriptID) {
   memcpy_P(&aStep, pgm_read_word(&(animationSteps[scriptID])) + sizeof(struct animStep) * i++, sizeof(struct animStep));
 
   while (aStep.command != CMND_END) {
-    /*
-      Serial.println(aStep.command);
-      Serial.println(aStep.ID);
-      Serial.println(aStep.xPos);
-      Serial.println(aStep.yPos);
-      Serial.println(aStep.clear);
-      Serial.println(aStep.delay);
-    */
     switch (aStep.command) {
       case CMND_PLAY:
         playAnimation(aStep.ID, aStep.xPos, aStep.yPos, aStep.clear);
         delay(aStep.delay);
         break;
       case CMND_RENDER:
-        renderSprite(aStep.ID, aStep.xPos, aStep.yPos, aStep.clear);
-        SHOW;
-        delay(aStep.delay);
+        renderSprite(aStep.ID, aStep.xPos, aStep.yPos, aStep.clear, true, aStep.delay);
         break;
       case CMND_WIPE:
         effectWipe(aStep.ID, aStep.xPos, aStep.yPos, aStep.clear, aStep.delay);
