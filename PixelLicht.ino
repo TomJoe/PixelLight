@@ -65,13 +65,14 @@ void setup() {
   }
   SHOW;
 
+  playScript(16);
   playScript(3);
 
 }
 
 void loop() {
 
-  playScript(random8(6, 13));
+  playScript(random8(6, 16));
   playScript(random8(0, 5));
 
 }

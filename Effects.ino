@@ -120,8 +120,8 @@ void bloob(bool clear, int aDelay) {
   }
 }
 
-void dropSprite(int aDelay, int spriteID){
-  
+void dropSprite(int aDelay, int spriteID) {
+
 }
 
 void tunnel(int aDelay) {
@@ -148,6 +148,53 @@ void tunnel(int aDelay) {
     DELY;
     j--;
   }
+}
+
+struct star {
+  int frame;
+  long xx;
+  long yy;
+};
+
+#define FEINUNG 100
+#define NUMSTARS 15
+#define ITERS 400
+#define LIGHT 10
+
+
+
+void starField(int aDelay) {
+  star stars[NUMSTARS];
+  for (int i = NUMSTARS-1; i >= 0; i--) {
+    stars[i].xx = randophOhneNull();
+    stars[i].yy = randophOhneNull();
+  }
+
+  for (int j = 0; j < ITERS; j++) {
+    for (int jj = 0; jj < NUM_LEDS; jj++) {
+      leds[jj] = CRGB::Black;
+    };
+    int x,y;
+    CRGB starColor;
+    for (int i = NUMSTARS-1; i >= 0; i--) {
+      
+      x = 8 + stars[i].frame * stars[i].frame * stars[i].xx / FEINUNG;
+      y = 8 + stars[i].frame * stars[i].frame * stars[i].yy / FEINUNG;
+      starColor = CRGB(stars[i].frame*LIGHT,stars[i].frame*LIGHT,stars[i].frame*LIGHT);
+      
+      stars[i].frame++;
+      
+      setPixel(x,y, starColor);
+      if ((x > COLS || x < 0) && ((y > ROWS || y < 0))){
+        stars[i].xx = randophOhneNull();
+        stars[i].yy = randophOhneNull();
+        stars[i].frame = 0;
+      }
+    }
+    SHOW;
+    DELY;
+  }
+
 }
 
 void effectWipe(int mode, int tail, int yPos, bool clear, int aDelay) {

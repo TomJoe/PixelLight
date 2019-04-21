@@ -5,6 +5,8 @@
 #define CMND_BLOOB 4
 #define CMND_TUNNEL 5
 #define CMND_ANSCHISS 6 
+#define CMND_STARS 7
+#define CMND_ANIM 8
 #define CMND_END 0xff
 
 struct animStep {
@@ -172,6 +174,32 @@ static const animStep krassserAnschiss[] PROGMEM = {
   animStep{CMND_END, 0, 0, 0, false, 0}
 };
 
+static const animStep StarField[] PROGMEM = {
+  animStep{CMND_STARS, 0, 0, 0, true , 10},
+  
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
+
+static const animStep pokeBall[] PROGMEM = {
+  animStep{CMND_RENDER, 11, 0, 0, true , 3000},  
+
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
+
+static const animStep laser[] PROGMEM = {
+  animStep{CMND_RENDER, 12, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 13, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 14, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 15, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 16, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 17, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 18, 0, 0, true , 500},  
+  animStep{CMND_RENDER, 19, 0, 0, true , 500},  
+
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
+
+
 
 
 static animStep* const animationSteps[] PROGMEM = {
@@ -187,8 +215,11 @@ static animStep* const animationSteps[] PROGMEM = {
   fruits,       // 9
   DeathAnim,    //10
   Anschiss,     //11
-  richtigerAnschiss, //11
-  krassserAnschiss //12
+  richtigerAnschiss, //12
+  krassserAnschiss, //13
+  StarField,     //14
+  pokeBall,      //15
+  laser          //16
 };
 
 void playScript(int scriptID) {
@@ -232,6 +263,9 @@ void playScript(int scriptID) {
         break;
       case CMND_ANSCHISS:
         scheissAn(aStep.delay, aStep.ID);
+        break;
+      case CMND_STARS:
+        starField(aStep.delay);
         break;
     }
     memcpy_P(&aStep, pgm_read_word(&(animationSteps[scriptID])) + sizeof(struct animStep) * i++, sizeof(struct animStep));
