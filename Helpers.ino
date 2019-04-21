@@ -108,8 +108,6 @@ void fillCircle(int x, int y, int r, CRGB color) {
   }
 }
 
-long randophOhneNull(){
-  long x = random(-10,10);
-  if (x == 0) {x = randophOhneNull();};
-  return x;
+float schwimmenderRandolph(){
+  return (float) random(-100, 100) / 100.0;
 }

@@ -200,8 +200,18 @@ static const animStep herzlich[] PROGMEM = {
   animStep{CMND_END, 0, 0, 0, false, 0}
 };
 
+static const animStep pandaWinke[] PROGMEM = {
+  animStep{CMND_RENDER, 14, 0, 0, true , 100}, 
+  animStep{CMND_RENDER, 14, 0, 0, true , 100}, 
 
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
 
+static const animStep winkeMan[] PROGMEM = {
+  animStep{CMND_RENDER, 15, 0, 0, true , 500}, 
+
+  animStep{CMND_END, 0, 0, 0, false, 0}
+};
 
 static animStep* const animationSteps[] PROGMEM = {
   wipeLR,       // 0
@@ -221,7 +231,9 @@ static animStep* const animationSteps[] PROGMEM = {
   StarField,     //14
   pokeBall,      //15
   laser,         //16
-  herzlich       //17
+  herzlich,      //17
+  pandaWinke,     //18
+  winkeMan       //19
 };
 
 void playScript(int scriptID) {

@@ -152,22 +152,24 @@ void tunnel(int aDelay) {
 
 struct star {
   int frame;
-  long xx;
-  long yy;
+  float xx;
+  float yy;
 };
 
-#define FEINUNG 100
-#define NUMSTARS 15
+#define FEINUNG 10.0
+#define NUMSTARS 30
 #define ITERS 400
-#define LIGHT 10
+#define LIGHT 5
 
 
 
 void starField(int aDelay) {
+  FastLED.setBrightness( 255 );
+
   star stars[NUMSTARS];
   for (int i = NUMSTARS-1; i >= 0; i--) {
-    stars[i].xx = randophOhneNull();
-    stars[i].yy = randophOhneNull();
+    stars[i].xx = schwimmenderRandolph();
+    stars[i].yy = schwimmenderRandolph();
   }
 
   for (int j = 0; j < ITERS; j++) {
@@ -178,23 +180,24 @@ void starField(int aDelay) {
     CRGB starColor;
     for (int i = NUMSTARS-1; i >= 0; i--) {
       
-      x = 8 + stars[i].frame * stars[i].frame * stars[i].xx / FEINUNG;
-      y = 8 + stars[i].frame * stars[i].frame * stars[i].yy / FEINUNG;
-      starColor = CRGB(stars[i].frame*LIGHT,stars[i].frame*LIGHT,stars[i].frame*LIGHT);
+      long state = stars[i].frame * stars[i].frame;
+      x = 8 + state * stars[i].xx / FEINUNG;
+      y = 8 + state * stars[i].yy / FEINUNG;
+      starColor = CRGB(state/LIGHT,state/LIGHT,state/LIGHT);
       
       stars[i].frame++;
       
       setPixel(x,y, starColor);
       if ((x > COLS || x < 0) && ((y > ROWS || y < 0))){
-        stars[i].xx = randophOhneNull();
-        stars[i].yy = randophOhneNull();
+        stars[i].xx = schwimmenderRandolph();
+        stars[i].yy = schwimmenderRandolph();
         stars[i].frame = 0;
       }
     }
     SHOW;
     DELY;
   }
-
+  FastLED.setBrightness( MAX_BREIT );
 }
 
 void effectWipe(int mode, int tail, int yPos, bool clear, int aDelay) {
