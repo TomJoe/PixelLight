@@ -135,10 +135,9 @@ void tunnel(int aDelay) {
     int i = 16;
 
     while (i > 0) {
-      int x = COLS / 2 - 1 + (sin8(j * 14) - 128) * (16 - i) / 256;
-      int y = ROWS / 2 - 1 + (cos8(j * 8) - 128) * (16 - i) / 256;
+      int x = COLS / 2 - 1 + (sin8((j+i/2) * 15) - 128) * (16 - i) / 256;
+      int y = ROWS / 2 - 1 + (cos8((j+i/2) * 8) - 128) * (16 - i) / 256;
       int r = i;
-      PRNT(x); PRSL; PRNT(y); PRSL; PRLN(r);
       CRGB color = ColorFromPalette( myPal, (16 - i) * 16);
       fillCircle(x, y, r, color);
       i--;

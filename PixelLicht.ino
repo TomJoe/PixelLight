@@ -69,7 +69,7 @@ void setup()
   }
   SHOW;
 
-playScript(19);
+  //playScript(19);
   playScript(3);
 }
 
