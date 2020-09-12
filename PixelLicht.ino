@@ -20,7 +20,6 @@
 
 // How many leds in your strip?
 #define NUM_LEDS 256
-
 #define DATA_PIN 4
 #define CLOCK_PIN 5
 
